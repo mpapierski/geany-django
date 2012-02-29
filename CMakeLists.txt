@@ -1,0 +1,28 @@
+CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
+PROJECT (geany_django)
+
+SET (plugin_SOURCES
+	geany_django.c
+	main.c)
+
+# Find Geany using pkg-config
+FIND_PACKAGE (PkgConfig)
+PKG_CHECK_MODULES (GEANY geany)
+#
+
+ADD_DEFINITIONS (-fPIC
+	${GEANY_CFLAGS})
+
+INCLUDE_DIRECTORIES (${GEANY_INCLUDE_DIRS})
+
+SET (CMAKE_SHARED_LIBRARY_PREFIX "")
+ADD_LIBRARY (geany_django
+	SHARED
+	${plugin_SOURCES})
+LINK_DIRECTORIES (${GEANY_LIBRARY_DIRS})
+TARGET_LINK_LIBRARIES (geany_django
+	${GEANY_LIBRARIES})
+
+# Install to the Geany plugin dir
+INSTALL (TARGETS geany_django LIBRARY
+	DESTINATION ${GEANY_LIBDIR}/geany)
